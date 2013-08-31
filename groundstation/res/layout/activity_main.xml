@@ -26,7 +26,7 @@
         android:text="@string/first_one1"
          />
         <TextView
-        android:id="@+id/two1"
+        android:id="@+id/one2"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/one1" 
@@ -34,19 +34,19 @@
         android:text="@string/first_one2"
          />
         <TextView
-        android:id="@+id/three1"
+        android:id="@+id/one3"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/two1" 
+        android:layout_toRightOf="@+id/one2" 
         android:layout_alignRight="@+id/RelativeLayout11"    
         android:padding="@dimen/padding_medium"
         android:text="@string/first_one3"
          />
         <TextView
-        android:id="@+id/four1"
+        android:id="@+id/one4"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
-        android:layout_below="@+id/three1"
+        android:layout_below="@+id/one3"
         android:layout_alignRight="@+id/RelativeLayout11"
         android:layout_alignBottom="@+id/RelativeLayout11"    
         android:padding="@dimen/padding_medium"
@@ -61,30 +61,39 @@
         android:layout_weight="1" 
         android:background="@color/antiquewhite">
         <TextView
-        android:id="@+id/one2"   
-        android:layout_width="wrap_content"       
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/RelativeLayout21"
+        android:id="@+id/two1"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"     
         android:padding="@dimen/padding_medium"
-        android:text="@string/second_one"
-         /> 
-          <TextView
+        android:text="@string/first_one1"
+         />
+        <TextView
         android:id="@+id/two2"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/one2" 
+        android:layout_toRightOf="@+id/two1" 
         android:padding="@dimen/padding_medium"
-        android:text="@string/second_one"
+        android:text="@string/first_one2"
          />
         <TextView
-        android:id="@+id/three2"
+        android:id="@+id/two3"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/two2" 
-        android:layout_alignRight="@+id/RelativeLayout21"    
+        android:layout_alignRight="@+id/RelativeLayout11"    
         android:padding="@dimen/padding_medium"
-        android:text="@string/second_one"
-         />   
+        android:text="@string/first_one3"
+         />
+        <TextView
+        android:id="@+id/two4"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/two3"
+        android:layout_alignRight="@+id/RelativeLayout21"
+        android:layout_alignBottom="@+id/RelativeLayout21"    
+        android:padding="@dimen/padding_medium"
+        android:text="@string/first_one4"
+         />
         </RelativeLayout>
          </LinearLayout>
         
@@ -97,9 +106,10 @@
         android:layout_alignParentRight="true"
         android:background="@color/aqua"
         >
-        <TextView
+        <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapsView"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"  
-        android:text="@string/three_one"/>
+        android:layout_height="fill_parent"
+        android:clickable="true" />
         </RelativeLayout>
 </RelativeLayout>
