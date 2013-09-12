@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.woze.groundstation"
+    package="com.wozhuo.groundstation"
     android:versionCode="1"
     android:versionName="1.0" >
     
@@ -10,19 +10,45 @@
             android:largeScreens="true"
             android:resizeable="true"
             android:anyDensity="true" />
-    
+    <!-- 添加使用权-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_LOGS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
     
     <application
         android:icon="@drawable/ic_launcher"
+        android:allowBackup="true"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        android:name="com.wozhuo.BaiDuPlane.BaiduMapApplication" >
         
         <!--android:screenOrientation="landscape" 使其为横屏显示  -->
         <activity
             android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
@@ -31,6 +57,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 添加服务-->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
     </application>
 
 </manifest>

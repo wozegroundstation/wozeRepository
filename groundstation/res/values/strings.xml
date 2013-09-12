@@ -4,11 +4,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="second_one">第二区域</string>
+    <string name="second_one">quick</string>
     <string name="three_one">第三区域</string>
     <string name="first_one1">第一区域</string>
     <string name="first_one2">第一区域2</string>
     <string name="first_one3">第一区域3</string>
     <string name="first_one4">第一区域4</string>
+    <string name="location">定位</string>
 
 </resources>
