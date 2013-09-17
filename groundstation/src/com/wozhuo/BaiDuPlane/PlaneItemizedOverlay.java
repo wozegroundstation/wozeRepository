@@ -3,9 +3,12 @@ package com.wozhuo.BaiDuPlane;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.ItemizedOverlay;
+import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
+import com.wozhuo.BaiDuPlane.Entity.Plane;
 
 import android.graphics.drawable.Drawable;
 /*
@@ -22,21 +25,16 @@ public class PlaneItemizedOverlay extends ItemizedOverlay<OverlayItem>{
     //用于在地图上标识坐标，用一个图片标注  
 	public  PlaneItemizedOverlay(Drawable drawable) {
         super(drawable);
-        	/*GeoPoint geoPoint1 = new GeoPoint( (int) ((32.09) * 1E6), (int) ((118.78)* 1E6));    
-            overlayItem.add(new OverlayItem(geoPoint1, "A", "飞机模型"));  
-            //刷新地图  
-            populate();*/   
     } 
     
-    public void addOverlay(){
-    	GeoPoint geoPoint1 = new GeoPoint( (int) ((32.09) * 1E6), (int) ((118.78)* 1E6));    
-        overlayItem.add(new OverlayItem(geoPoint1, "A", "飞机模型"));  
+    public void addOverlay(GeoPoint geoPoint){
+    	overlayItem.add(new OverlayItem(geoPoint, "A", "飞机模型"));  
         //刷新地图  
         populate();
     }
 	//返回指定的List集合中每一个坐标  
     @Override  
-    protected OverlayItem createItem(int arg0) {  
+    protected OverlayItem createItem(int arg0) {
         return overlayItem.get(arg0);  
     }  
 
@@ -44,7 +42,10 @@ public class PlaneItemizedOverlay extends ItemizedOverlay<OverlayItem>{
     public int size() {  
         return overlayItem.size();  
     }
- 
+    //删除指定的飞机
+    public void getPlane(){
+    	overlayItem.remove(0);
+	 
+    }
    
 }
-

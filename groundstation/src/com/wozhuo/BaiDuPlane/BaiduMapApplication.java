@@ -15,7 +15,7 @@ import android.widget.Toast;
  * @author android_xiaoliTao 
  */  
 public class BaiduMapApplication extends Application {
-	 /*
+	/*
      * 
      * 经研究发现在申请KEY时：应用名称一定要写成my_app_应用名（也就是说"my_app_"是必须要有的）。
      * 百度地图SDK提供的服务是免费的，接口无使用次数限制。您需先申请密钥（key)，才可使用该套SDK。

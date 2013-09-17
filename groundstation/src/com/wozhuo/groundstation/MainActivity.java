@@ -9,9 +9,12 @@ import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationOverlay;
+import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.wozhuo.BaiDuPlane.BaiduMapApplication;
 import com.wozhuo.BaiDuPlane.PlaneItemizedOverlay;
+import com.wozhuo.BaiDuPlane.Entity.Plane;
+
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,6 +40,8 @@ public class MainActivity extends Activity {
     private LocationData locData;
     private LocationOverlay mLocationOverlay;
     private Button location_button;
+    private BDLocation isChange_location=null;
+	private PlaneItemizedOverlay  customItemizedOverlay;
     /* 
      * Application对象的引用 
      */  
@@ -169,12 +174,34 @@ public class MainActivity extends Activity {
      * 在百度地图上添加飞机图片
      * @author android_xiaoliTao
      */
-      public void add_plane(){
-          Drawable marker = getResources().getDrawable(R.drawable.ic_plane); 
-          PlaneItemizedOverlay  customItemizedOverlay =new PlaneItemizedOverlay(marker);
-          customItemizedOverlay.addOverlay();
-          mMapView.getOverlays().add(customItemizedOverlay);
+      public void add_plane(BDLocation location){
+    	  Plane plane=new Plane();
+    	  plane.setMarker(getResources().getDrawable(R.drawable.ic_plane));
+    	  plane.setGeoPoint(new GeoPoint((int) (location.getLatitude() * 1e6),(int) (location.getLongitude() * 1e6)));
+    	  //plane.setGeoPoint(new GeoPoint((int) ((32.086387) * 1E6), (int) ((118.774869 )* 1E6)));
+    	  Drawable marker=plane.getMarker();
+    	  GeoPoint geoPoint=plane.getGeoPoint();
+    	  customItemizedOverlay =new PlaneItemizedOverlay(marker);
+    	  //添加飞机
+    	  if(isChange_location==null){
+          customItemizedOverlay.addOverlay(geoPoint);
+		  mMapView.getOverlays().add(customItemizedOverlay);
+    	  }else if(isChange_location!=null&&isChange_location!=location){
+    		  //删除上一个飞机
+    		  System.out.print("测试");
+    		customItemizedOverlay.addOverlay(geoPoint);
+    		//Boolean isRemove=mMapView.getOverlays().remove(customItemizedOverlay);
+    		mMapView.getOverlays().clear();
+    		  //添加新的飞机
+    		//if(isRemove){
+    		  mMapView.getOverlays().add(customItemizedOverlay);
+    		//}
+    	  }else{
+    		  return;
+    	  }
+    	  isChange_location=location;
           mMapView.refresh(); // 刷新地图   
+          
 }
       /*
        * BUTTON监听
@@ -186,12 +213,13 @@ public class MainActivity extends Activity {
 
           	@Override
           	public void onClick(View v) {
-          		add_plane();
+          		//add_plane(location);
           		
           	}
           	 
            });
       }
+      
       /*
        * 地面站位置覆盖物类
        * @author android_xiaoliTao
@@ -213,8 +241,11 @@ public class MainActivity extends Activity {
   			if(location==null){
   				return;
   			}
+  			    add_plane(location);
   	            // 在地图上标注定位得到地面站当前的位置  
-  	            markLocation(location);  
+  	            markLocation(location);
+  	           
+  	            
   		}
 
   		@Override
@@ -261,4 +292,4 @@ public class MainActivity extends Activity {
           
 
       }  
- 
+  
