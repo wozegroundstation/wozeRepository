@@ -9,7 +9,6 @@ import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationOverlay;
-import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.wozhuo.BaiDuPlane.BaiduMapApplication;
 import com.wozhuo.BaiDuPlane.PlaneItemizedOverlay;
@@ -34,14 +33,16 @@ public class MainActivity extends Activity {
     // MapView控制器对象的引用 
     protected MapController mMapController;
     //定位SDK的核心类   
-    private LocationClient mLocationClient=null;
+    public LocationClient mLocationClient=null;
     private MyLocationListener mLocationListener;
     //地面站的位置信息数据  
     private LocationData locData;
+    private LocationData planelocData;
     private LocationOverlay mLocationOverlay;
     private Button location_button;
-    private BDLocation isChange_location=null;
-	private PlaneItemizedOverlay  customItemizedOverlay;
+	private PlaneItemizedOverlay  planeItemizedOverlay;
+	private  GeoPoint geoPoint;
+	private Plane plane;
     /* 
      * Application对象的引用 
      */  
@@ -53,9 +54,9 @@ public class MainActivity extends Activity {
         initApplication();
         setContentView(R.layout.activity_main);
         setWindowManager();
-        groundStationlocation();
+       groundStationlocation();
         buttonListener();
-        
+       //initMap();
     }
     /*
      * 初始化地图引擎对象
@@ -100,9 +101,12 @@ public class MainActivity extends Activity {
      * 
      */  
     public void groundStationlocation(){
-    	  
+    	initMap();
+    	//在主线程中声明
     	mLocationClient = new LocationClient(this.getApplicationContext());
-    	mLocationListener = new MyLocationListener();  
+    	mLocationListener = new MyLocationListener();
+    	locData = new LocationData();
+    	//注册监听接口
         mLocationClient.registerLocationListener(mLocationListener); 
         //设置定位参数
         LocationClientOption locationOption = new LocationClientOption();  
@@ -113,13 +117,22 @@ public class MainActivity extends Activity {
         locationOption.setProdName("GPS定位");
         locationOption.setScanSpan(1000);
         mLocationClient.setLocOption(locationOption); 
-        
+        //开启
         mLocationClient.start();
-        mLocationOverlay = new LocationOverlay(mMapView);  
+        //添加地面站覆盖物
+        mLocationOverlay = new LocationOverlay(mMapView);
+        mMapView.getOverlays().add(mLocationOverlay); 
+         
         // 百度官方API文档解释：打开指南针，但是我试验觉得默认指南针就是打开的  
-        mLocationOverlay.enableCompass();  
-        locData = new LocationData();
-        initMap();
+        mLocationOverlay.enableCompass();
+        
+        
+          /*plane=new Plane();
+    	  plane.setMarker(getResources().getDrawable(R.drawable.ic_plane));
+    	  Drawable marker=plane.getMarker();
+    	  planeItemizedOverlay =new PlaneItemizedOverlay(marker,mMapView);
+    	  planelocData=new LocationData();*/
+        mMapView.refresh();
     }
     /*
      * 初始化地图
@@ -143,6 +156,7 @@ public class MainActivity extends Activity {
      mMapController.setZoom(19);
      // 显示卫星图
      mMapView.setSatellite(true);
+      
     }
     
     /* 
@@ -162,12 +176,11 @@ public class MainActivity extends Activity {
         }  
   
         mLocationOverlay.setData(locData);  
-        mMapView.getOverlays().add(mLocationOverlay);  
         mMapView.refresh();  
         
         // 将我的当前位置移动到地图的中心点  
         mMapController.animateTo(new GeoPoint((int) (locData.latitude * 1e6),(int) (locData.longitude * 1e6)));  
-  
+        System.out.print("!!!!!!!!!!!!!!1");
     }
   
     /*
@@ -175,34 +188,17 @@ public class MainActivity extends Activity {
      * @author android_xiaoliTao
      */
       public void add_plane(BDLocation location){
-    	  Plane plane=new Plane();
-    	  plane.setMarker(getResources().getDrawable(R.drawable.ic_plane));
-    	  plane.setGeoPoint(new GeoPoint((int) (location.getLatitude() * 1e6),(int) (location.getLongitude() * 1e6)));
-    	  //plane.setGeoPoint(new GeoPoint((int) ((32.086387) * 1E6), (int) ((118.774869 )* 1E6)));
-    	  Drawable marker=plane.getMarker();
-    	  GeoPoint geoPoint=plane.getGeoPoint();
-    	  customItemizedOverlay =new PlaneItemizedOverlay(marker);
-    	  //添加飞机
-    	  if(isChange_location==null){
-          customItemizedOverlay.addOverlay(geoPoint);
-		  mMapView.getOverlays().add(customItemizedOverlay);
-    	  }else if(isChange_location!=null&&isChange_location!=location){
-    		  //删除上一个飞机
-    		  System.out.print("测试");
-    		customItemizedOverlay.addOverlay(geoPoint);
-    		//Boolean isRemove=mMapView.getOverlays().remove(customItemizedOverlay);
-    		mMapView.getOverlays().clear();
-    		  //添加新的飞机
-    		//if(isRemove){
-    		  mMapView.getOverlays().add(customItemizedOverlay);
-    		//}
-    	  }else{
-    		  return;
-    	  }
-    	  isChange_location=location;
+    	 
+    	  planelocData.latitude = location.getLatitude();  
+    	  planelocData.longitude = location.getLongitude();  
+    	  plane.setGeoPoint(new GeoPoint((int) (planelocData.latitude * 1e6),(int) (planelocData.longitude * 1e6)));
+    	  geoPoint=plane.getGeoPoint();
+    	  planeItemizedOverlay.addOverlay(geoPoint);
+		  mMapView.getOverlays().add(planeItemizedOverlay);
           mMapView.refresh(); // 刷新地图   
           
 }
+     
       /*
        * BUTTON监听
        * @author android_xiaoliTao
@@ -214,12 +210,13 @@ public class MainActivity extends Activity {
           	@Override
           	public void onClick(View v) {
           		//add_plane(location);
-          		
+          		 if (mLocationClient != null && mLocationClient.isStarted())  
+                     mLocationClient.requestLocation();
           	}
           	 
            });
       }
-      
+     
       /*
        * 地面站位置覆盖物类
        * @author android_xiaoliTao
@@ -241,10 +238,10 @@ public class MainActivity extends Activity {
   			if(location==null){
   				return;
   			}
-  			    add_plane(location);
+  			    
   	            // 在地图上标注定位得到地面站当前的位置  
   	            markLocation(location);
-  	           
+  	            //add_plane(location);
   	            
   		}
 
@@ -253,7 +250,8 @@ public class MainActivity extends Activity {
   			// TODO Auto-generated method stub
   		}  
       }
-      
+     
+     
    /*
     * 重写以下方法，管理API(non-Javadoc)
     * @author android_xiaoliTao

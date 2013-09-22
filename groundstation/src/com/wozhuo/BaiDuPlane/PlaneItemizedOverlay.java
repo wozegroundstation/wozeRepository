@@ -6,6 +6,7 @@ import java.util.List;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.ItemizedOverlay;
 import com.baidu.mapapi.map.LocationData;
+import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.wozhuo.BaiDuPlane.Entity.Plane;
@@ -23,14 +24,16 @@ import android.graphics.drawable.Drawable;
 public class PlaneItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	private List<OverlayItem> overlayItem = new ArrayList<OverlayItem>();
     //用于在地图上标识坐标，用一个图片标注  
-	public  PlaneItemizedOverlay(Drawable drawable) {
+	/*public  PlaneItemizedOverlay(Drawable drawable) {
         super(drawable);
+    } */
+	public  PlaneItemizedOverlay(Drawable drawable,MapView mMapView) {
+        super(drawable, mMapView);
     } 
-    
     public void addOverlay(GeoPoint geoPoint){
     	overlayItem.add(new OverlayItem(geoPoint, "A", "飞机模型"));  
         //刷新地图  
-        populate();
+       // populate();
     }
 	//返回指定的List集合中每一个坐标  
     @Override  
@@ -42,10 +45,6 @@ public class PlaneItemizedOverlay extends ItemizedOverlay<OverlayItem>{
     public int size() {  
         return overlayItem.size();  
     }
-    //删除指定的飞机
-    public void getPlane(){
-    	overlayItem.remove(0);
-	 
-    }
+   
    
 }
